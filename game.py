@@ -11,12 +11,16 @@ KEYBOARD = None
 PLAYER = None
 ######################
 
-GAME_WIDTH = 7
-GAME_HEIGHT = 7
+GAME_WIDTH = 16
+GAME_HEIGHT = 12
 
 #### Put class definitions here ####
 class Rock(GameElement):
     IMAGE = "Rock"
+    SOLID = True
+
+class Trees(GameElement):
+    IMAGE = "ShortTree"
     SOLID = True
 
 class Character(GameElement):
@@ -61,10 +65,23 @@ def initialize():
     """Put game initialization code here"""
     
     rock_positions = [
-        (2,1),
+        (0,3),
+        (1,11),
         (1,2),
-        (3,2),
-        (2,3),
+        (2,0),
+        (3,9),
+        (3,7),
+        (5,9),
+        (5,7),
+        (5,6),
+        (6,3),
+        (7,3),
+        (8,7),
+        (11,4),
+        (12,9),
+        (13,4),
+        (15,6),
+        (15,8)
         ]
 
     rocks = []
@@ -75,15 +92,36 @@ def initialize():
         GAME_BOARD.set_el(pos[0], pos[1], rock)
         rocks.append(rock)
 
-    rocks[-1].SOLID = False
+    tree_positions = [
+        (0,5),
+        (0,10),
+        (1,6),
+        (1,4),
+        (4,0),
+        (4,5),
+        (6,5),
+        (7,2),
+        (11,2),
+        (11,7),
+        (11,9),
+        (13,8),
+        (14,10),
+        (14,4),
+        (15,5)
+        ]
 
-    for rock in rocks:
-        print rock
+    trees = []
+
+    for pos in tree_positions:
+        tree = Trees()
+        GAME_BOARD.register(tree)
+        GAME_BOARD.set_el(pos[0], pos[1], tree)
+        trees.append(tree)
 
     global PLAYER
     PLAYER = Character()
     GAME_BOARD.register(PLAYER)
-    GAME_BOARD.set_el(2,2, PLAYER)
+    GAME_BOARD.set_el(0,0, PLAYER)
     print PLAYER
 
     GAME_BOARD.draw_msg("This game is wicked awesome.")
