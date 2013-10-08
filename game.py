@@ -138,6 +138,13 @@ class OrangeGem(Gem):
 class DoorClosed(GameElement):
     IMAGE = "DoorClosed"
     SOLID = True
+ 
+    def interact(self, player):
+        if len(player.inventory) < 10:
+            GAME_BOARD.draw_msg("Sup? I'm a door. You need at least 10 gems to pass. Go find more gems.")
+        else:
+            GAME_BOARD.draw_msg("Congrats, yo! You win! Walk through me!")
+            self.SOLID = False 
 
  
 ####   End class definitions    ####
@@ -345,7 +352,7 @@ def keyboard_handler():
 
     GAME_BOARD.time += 1
 
-    if len(GAME_BOARD.orange_gems) > 1 and GAME_BOARD.time%30 == 0:
+    if len(GAME_BOARD.orange_gems) > 1 and GAME_BOARD.time%10 == 0:
         dead_gem = GAME_BOARD.orange_gems.pop(0)
         GAME_BOARD.del_el(dead_gem.x, dead_gem.y)
 
@@ -365,10 +372,14 @@ def keyboard_handler():
         next_x = next_location[0]
         next_y = next_location[1]
 
-        if next_x >= GAME_WIDTH  or next_x <= -1:
+        if PLAYER.x == 9 and PLAYER.y == 8:
+            next_x = PLAYER.x + 1
+            next_y = PLAYER.y + 1
+
+        elif next_x >= GAME_WIDTH  or next_x <= -1:
             next_x = PLAYER.x
 
-        if next_y >= GAME_HEIGHT or next_y <= -1:
+        elif next_y >= GAME_HEIGHT or next_y <= -1:
             next_y = PLAYER.y
         
 
