@@ -145,6 +145,8 @@ class DoorClosed(GameElement):
 
 
 def initialize():
+    GAME_BOARD.time = 0
+    GAME_BOARD.orange_gems = []
     """Put game initialization code here"""
 
     # blue_gem_positions = [
@@ -315,8 +317,6 @@ def engage_in_conversation():
 
 def gem_handler():
     print "Gem Handler was called."
-
-
     possible_x = random.randint(0, 9)
     possible_y = random.randint(0,8)
 
@@ -324,14 +324,17 @@ def gem_handler():
 
     existing_el = GAME_BOARD.get_el(possible_x, possible_y)
 
+    orange_gem = OrangeGem()
+
+
+
     if existing_el is None:
-        orange_gem = OrangeGem()
         GAME_BOARD.register(orange_gem)
         GAME_BOARD.set_el(position[0], position[1], orange_gem)
+        GAME_BOARD.orange_gems.append(orange_gem)
     else:
         pass
 
-    position = (possible_x, possible_y)
 
     print "%d, %d" % (position[0], position[1])
 
@@ -339,6 +342,12 @@ def keyboard_handler():
     if CONVERSATION_PARTNER != None:
         engage_in_conversation()
         return
+
+    GAME_BOARD.time += 1
+
+    if len(GAME_BOARD.orange_gems) > 1 and GAME_BOARD.time%30 == 0:
+        dead_gem = GAME_BOARD.orange_gems.pop(0)
+        GAME_BOARD.del_el(dead_gem.x, dead_gem.y)
 
     direction = None
 
