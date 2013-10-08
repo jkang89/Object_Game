@@ -3,6 +3,7 @@ import pyglet
 from pyglet.window import key
 from core import GameElement
 import sys
+import random
 
 #### DO NOT TOUCH ####
 GAME_BOARD = None
@@ -35,7 +36,7 @@ class Character(GameElement):
     IMAGE = "Cat"
     def __init__(self):
         GameElement.__init__(self)
-        self.inventory = []
+        self.inventory = {"Gems": 0}
 
     def next_pos(self, direction):
         if direction == "up":
@@ -49,10 +50,6 @@ class Character(GameElement):
         return None
 
 class NPC(GameElement):
-    # if defeated != True: #Make defeated 
-    #     SOLID = True
-    # else:
-    #     SOLID = False
     SOLID = True
 
 class Blue_NPC(NPC):
@@ -63,6 +60,56 @@ class Green_NPC(NPC):
 
 class Orange_NPC(NPC):
     IMAGE = "Horns"
+
+"""
+^^Replace above code with below code: 
+
+Initialize the class: 
+class NPC(GameElement):
+    def __init__(image):
+        self.IMAGE = image
+        self.QA_tuple = random.choice(self.questions[self.IMAGE])
+
+    questions = {
+        'Princess': [("What is 5x5?", "25"), ("What is 2+2?", "4")],
+        'Boy': [("What is the most dangerous animal?", "hippo"), 
+                ("What holiday is on Dec. 25th?", "Christmas")]
+        'Horns': [("A riddle", "answer")]
+        }
+
+
+    def interact(self, player):
+        GAME_BOARD.draw_msg(self.QA_tuple[0])
+        response = raw_input("> ")
+
+        while response != self.QA_tuple[1]:
+            GAME_BOARD.draw_msg("Nope, try again.")
+
+        self.SOLID = False
+
+
+Instantiate the class in initialize function:
+
+  Blue_NPC_positions = [
+        (0,2),
+        (0,7),
+        (0,10),
+        (3,1)
+        ]
+
+    Blue_NPCs = []
+
+    for pos in Blue_NPC_positions:
+        blue_npc = NPC()
+        GAME_BOARD.register(blue_npc)
+        GAME_BOARD.set_el(pos[0], pos[1], blue_npc)
+        Blue_NPCs.append(blue_npc)
+
+For simplicity, delete chests? 
+
+"""
+
+
 
 class Gem(GameElement):
     SOLID = False
