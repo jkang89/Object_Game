@@ -4,6 +4,7 @@ import pyglet
 from pyglet.window import key
 from core import GameElement
 
+
 SCREEN_X = 1700
 SCREEN_Y = 1100
 
@@ -40,7 +41,8 @@ def setup_images():
             "Cat": "Character Cat Girl.png",
             "Horns": "Character Horn Girl.png",
             "Girl": "Character Pink Girl.png",
-            "Princess": "Character Princess Girl.png"
+            "Princess": "Character Princess Girl.png",
+            "Christian": "czf.png"
             }
 
     for k,v in filenames.items():
@@ -228,7 +230,16 @@ def run():
     except AttributeError:
         print "No keyboard handler"
         pass
-        
+
+    try:
+        gem_handler = game.gem_handler
+        def gem_handler_wrapper(dt):
+            gem_handler()
+        pyglet.clock.schedule_interval(gem_handler_wrapper, 3)
+    except AttributeError:
+        print "There is no gem handler."
+        pass
+
     # Set up the update clock
     pyglet.clock.schedule_interval(update, 1/10.)
     game.initialize()

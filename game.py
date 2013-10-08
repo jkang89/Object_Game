@@ -323,27 +323,25 @@ def engage_in_conversation():
         GAME_BOARD.del_el(p.x, p.y)
 
 def gem_handler():
-    print "Gem Handler was called."
+    orange_gem = OrangeGem()
     possible_x = random.randint(0, 9)
     possible_y = random.randint(0,8)
-
     position = (possible_x, possible_y)
 
     existing_el = GAME_BOARD.get_el(possible_x, possible_y)
 
-    orange_gem = OrangeGem()
+    while not existing_el is None:
+        possible_x = random.randint(0, 9)
+        possible_y = random.randint(0,8)
+        position = (possible_x, possible_y)
+        existing_el = GAME_BOARD.get_el(possible_x, possible_y)
 
 
-
-    if existing_el is None:
-        GAME_BOARD.register(orange_gem)
-        GAME_BOARD.set_el(position[0], position[1], orange_gem)
-        GAME_BOARD.orange_gems.append(orange_gem)
-    else:
-        pass
+    GAME_BOARD.register(orange_gem)
+    GAME_BOARD.set_el(position[0], position[1], orange_gem)
+    GAME_BOARD.orange_gems.append(orange_gem)
 
 
-    print "%d, %d" % (position[0], position[1])
 
 def keyboard_handler():  
     if CONVERSATION_PARTNER != None:
@@ -352,7 +350,7 @@ def keyboard_handler():
 
     GAME_BOARD.time += 1
 
-    if len(GAME_BOARD.orange_gems) > 1 and GAME_BOARD.time%10 == 0:
+    if len(GAME_BOARD.orange_gems) > 1 and GAME_BOARD.time%15 == 0:
         dead_gem = GAME_BOARD.orange_gems.pop(0)
         GAME_BOARD.del_el(dead_gem.x, dead_gem.y)
 
