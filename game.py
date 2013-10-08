@@ -9,18 +9,23 @@ GAME_BOARD = None
 DEBUG = False
 KEYBOARD = None
 PLAYER = None
+CONVERSATION_PARTNER = None
 ######################
 
-GAME_WIDTH = 16
-GAME_HEIGHT = 12
+GAME_WIDTH = 10
+GAME_HEIGHT = 9
 
 #### Put class definitions here ####
 class Rock(GameElement):
     IMAGE = "Rock"
     SOLID = True
 
-class Trees(GameElement):
+class ShortTrees(GameElement):
     IMAGE = "ShortTree"
+    SOLID = True
+
+class TallTrees(GameElement):
+    IMAGE = "TallTree"
     SOLID = True
 
 class Walls(GameElement):
@@ -49,20 +54,64 @@ class Character(GameElement):
         return None
 
 class NPC(GameElement):
-    # if defeated != True: #Make defeated 
-    #     SOLID = True
-    # else:
-    #     SOLID = False
     SOLID = True
 
-class Blue_NPC(NPC):
+    def interact(self, player):
+        global CONVERSATION_PARTNER
+        CONVERSATION_PARTNER = self
+
+        self.current_line = 0
+
+
+class Princess_NPC(NPC):
     IMAGE = "Princess"
+    LINES = ["Hello, welcome to our barren land. (Press SPACE to advance conversation.)",
+             "Please answer this simple question to pass.",
+             "If you were running a race, and you pass the person in 2nd place, what place would you be in?",
+             "a) First place    b) Second place     c) Third place      d) The best place"
+             ]
+    answer = "b"
 
-class Green_NPC(NPC):
+class Boy_NPC(NPC):
     IMAGE = "Boy"
+    LINES = ["'ello, luv.  Noice weather, we're havin'.",
+            "You mind doin me a favuh, luv and answer me question?",
+            "Tell me quickly, luv. What was da first 'uman organ ter be transferred from a cadaver ter a live 'uman?",
+            "Is it: a) the heart        b) the liver        c) the kidney       d) the eyeball?"
+            ]
+    answer = "c"
 
-class Orange_NPC(NPC):
+class Girl_NPC(NPC):
+    IMAGE = "Girl"
+    LINES = ["I expected someone... smarter, but I suppose you'll have to do.",
+            "All right then, answer me this.",
+            "What is the definition of the term, anathema?",
+            "Please choose wisely, and don't waste my time."
+            "Is the answer: a) a cursed, detested person     b) a medical procedure    c) an expression of ill will     d) readiness to believe"
+            ]
+    answer = "a"
+
+class Christian_NPC(NPC):
+    IMAGE = "Christian"
+    LINES = ["Hey, brotimes.",
+             "What are the haps?",
+             "Sooooooo, you get to guess my middle name today.",
+             "If you don't get it, you fail at life."
+             "[Sweeps back hair.]",
+             "What is my middle name?",
+             "(Don't fuck this up.)",
+             "Is it: a) Gross Garbage   b) Dr. Fishopolis   c) Zeppelin   d) None of the above"
+            ]
+
+    answer = "d"
+
+class Horns_NPC(NPC):
     IMAGE = "Horns"
+    LINES = ["Greetings, plebian.",
+             "Congratulations making it thus far, but I'm afraid this is the end of your journey.",
+             "*Diabolical laughter*",
+             "Riddle me this: "
+            ]
 
 class Gem(GameElement):
     SOLID = False
@@ -74,11 +123,9 @@ class Gem(GameElement):
 class BlueGem(Gem):
     IMAGE = "BlueGem"
 
-class GreenGem(Gem):
-    IMAGE = "GreenGem"
-
-class OrangeGem(Gem):
-    IMAGE = "OrangeGem"
+class DoorClosed(GameElement):
+    IMAGE = "DoorClosed"
+    SOLID = True
 
  
 ####   End class definitions    ####
@@ -89,16 +136,16 @@ def initialize():
     """Put game initialization code here"""
 
     blue_gem_positions = [
-        (0,3),
-        (0,6),
-        (0,11),
         (3,0),
-        (8,0),
-        (8,2),
-        (9,8),
-        (12,0),
-        (15,1),
-        (15,3)
+        (6,0),
+        (1,2),
+        (5,2),
+        (4,4),
+        (7,4),
+        (2,6),
+        (6,6),
+        (3,8),
+        (5,8)
         ]
 
     blue_gems = []
@@ -109,57 +156,16 @@ def initialize():
         GAME_BOARD.set_el(pos[0], pos[1], blue_gem)
         blue_gems.append(blue_gem)
 
-
-    green_gem_positions = [
-        (4,8),
-        (6,2),
-        (8,11),
-        (9,3),
-        (13,1)
-        ]
-
-    green_gems = []
-
-    for pos in green_gem_positions:
-        green_gem = GreenGem()
-        GAME_BOARD.register(green_gem)
-        GAME_BOARD.set_el(pos[0], pos[1], green_gem)
-        green_gems.append(green_gem)
-
-
-    orange_gem_positions = [
-        (1,5),
-        (5,5),
-        (11,5),
-        (12,8)
-        ]
-
-    orange_gems = []
-
-    for pos in orange_gem_positions:
-        orange_gem = OrangeGem()
-        GAME_BOARD.register(orange_gem)
-        GAME_BOARD.set_el(pos[0], pos[1], orange_gem)
-        orange_gems.append(orange_gem)
-    
     rock_positions = [
-        (0,4),
-        (1,3),
-        (1,11),
-        (2,0),
-        (3,9),
-        (3,7),
-        (5,9),
-        (5,7),
-        (5,6),
-        (6,3),
-        (7,3),
-        (8,7),
-        (11,4),
-        (12,9),
-        (13,4),
-        (15,6),
-        (15,8)
+        (0,1),
+        (1,1),
+        (2,1),
+        (3,1),
+        (4,1),
+        (5,1),
+        (6,1),
+        (7,1),
+        (8,1)
         ]
 
     rocks = []
@@ -170,51 +176,36 @@ def initialize():
         GAME_BOARD.set_el(pos[0], pos[1], rock)
         rocks.append(rock)
 
-    tree_positions = [
-        (0,5),
-        (1,10),
-        (1,6),
-        (1,4),
-        (4,0),
-        (4,5),
-        (6,5),
-        (7,2),
-        (11,2),
-        (11,7),
-        (11,9),
-        (13,8),
-        (14,10),
-        (14,4),
-        (15,5)
+    shorttree_positions = [
+        (1,3),
+        (2,3),
+        (3,3),
+        (4,3),
+        (5,3),
+        (6,3),
+        (7,3),
+        (8,3),
+        (9,3)
         ]
 
-    trees = []
+    shorttrees = []
 
-    for pos in tree_positions:
-        tree = Trees()
-        GAME_BOARD.register(tree)
-        GAME_BOARD.set_el(pos[0], pos[1], tree)
-        trees.append(tree)
+    for pos in shorttree_positions:
+        shorttree = ShortTrees()
+        GAME_BOARD.register(shorttree)
+        GAME_BOARD.set_el(pos[0], pos[1], shorttree)
+        shorttrees.append(shorttree)
 
     wall_positions = [
-        (2,1),
-        (5,2),
-        (7,1),
-        (7,10),
-        (7,11),
-        (8,3),
-        (9,1),
-        (9,4),
-        (9,10),
-        (9,11),
-        (10,2),
-        (10,3),
-        (10,4),
-        (11,0),
-        (11,3),
-        (11,6),
-        (11,8),
-        (12,1)
+        (0,5),
+        (1,5),
+        (2,5),
+        (3,5),
+        (4,5),
+        (5,5),
+        (6,5),
+        (7,5),
+        (8,5)
         ]
 
     walls = [] 
@@ -225,82 +216,49 @@ def initialize():
         GAME_BOARD.set_el(pos[0], pos[1], wall)
         walls.append(wall)
 
-    chest_positions = [
-        (2,4),
-        (3,8),
-        (3,11),
-        (4,3),
+    talltree_positions = [
+        (1,7),
+        (2,7),
+        (3,7),
         (4,7),
-        (5,0),
-        (5,8),
-        (5,11),
+        (5,7),
+        (6,7),
         (7,7),
-        (7,9),
-        (8,4),
-        (8,6),
-        (9,7),
-        (11,1),
-        (11,10),
-        (11,11),
-        (14,1),
-        (14,6),
-        (15,0)
+        (8,7),
+        (9,7)
         ]
 
-    chests = []
+    talltrees = []
 
-    for pos in chest_positions:
-        chest = Chests()
-        GAME_BOARD.register(chest)
-        GAME_BOARD.set_el(pos[0], pos[1], chest)
-        chests.append(chest)
+    for pos in talltree_positions:
+        talltree = TallTrees()
+        GAME_BOARD.register(talltree)
+        GAME_BOARD.set_el(pos[0], pos[1], talltree)
+        talltrees.append(talltree)
 
-    Blue_NPC_positions = [
-        (0,2),
-        (0,7),
-        (0,10),
-        (3,1)
-        ]
+    princess_npc = Princess_NPC()
+    GAME_BOARD.register(princess_npc)
+    GAME_BOARD.set_el(9,1, princess_npc)
 
-    Blue_NPCs = []
+    christian_npc = Christian_NPC()
+    GAME_BOARD.register(christian_npc)
+    GAME_BOARD.set_el(0,7, christian_npc)
 
-    for pos in Blue_NPC_positions:
-        blue_npc = Blue_NPC()
-        GAME_BOARD.register(blue_npc)
-        GAME_BOARD.set_el(pos[0], pos[1], blue_npc)
-        Blue_NPCs.append(blue_npc)
+    girl_npc = Girl_NPC()
+    GAME_BOARD.register(girl_npc)
+    GAME_BOARD.set_el(0,3, girl_npc)
 
-    Green_NPC_positions = [
-        (4,9),
-        (6,1),
-        (8,10),
-        (9,2),
-        (13,2)
-        ]
+    boy_npc = Boy_NPC()
+    GAME_BOARD.register(boy_npc)
+    GAME_BOARD.set_el(9,5, boy_npc)
 
-    Green_NPCs = []
+    horns_npc = Horns_NPC()
+    GAME_BOARD.register(horns_npc)
+    GAME_BOARD.set_el(8,8, horns_npc)
 
-    for pos in Green_NPC_positions:
-        green_npc = Green_NPC()
-        GAME_BOARD.register(green_npc)
-        GAME_BOARD.set_el(pos[0], pos[1], green_npc)
-        Green_NPCs.append(green_npc)
-
-    Orange_NPC_positions = [
-        (2,5),
-        (5,4),
-        (10,5),
-        (12,5),
-        (12,7)
-        ]
-
-    Orange_NPCs = []
-
-    for pos in Orange_NPC_positions:
-        orange_npc = Orange_NPC()
-        GAME_BOARD.register(orange_npc)
-        GAME_BOARD.set_el(pos[0], pos[1], orange_npc)
-        Orange_NPCs.append(orange_npc)
+    doorclosed = DoorClosed()
+    GAME_BOARD.register(doorclosed)
+    GAME_BOARD.set_el(9,8, doorclosed)
 
     global PLAYER
     PLAYER = Character()
@@ -308,22 +266,50 @@ def initialize():
     GAME_BOARD.set_el(0,0, PLAYER)
     print PLAYER
 
-    GAME_BOARD.draw_msg("This game is wicked awesome.")
-    
+
+def engage_in_conversation():
+    global CONVERSATION_PARTNER
+    p = CONVERSATION_PARTNER
+    line = p.LINES[p.current_line]
+    GAME_BOARD.draw_msg(line)
+
+    answer = None
+
+    if KEYBOARD[key.SPACE]:
+        p.current_line += 1
+        if p.current_line >= len(p.LINES):
+            p.current_line = len(p.LINES) - 1       
+    elif KEYBOARD[key.A]:
+        answer = "a"
+        CONVERSATION_PARTNER = None
+    elif KEYBOARD[key.B]:
+        answer = "b"
+        CONVERSATION_PARTNER = None
+    elif KEYBOARD[key.C]:
+        answer = "c"
+        CONVERSATION_PARTNER = None
+    elif KEYBOARD[key.D]:
+        answer = "d"
+        CONVERSATION_PARTNER = None
+
+    if answer == p.answer:
+        GAME_BOARD.del_el(p.x, p.y)
+
+
 def keyboard_handler():  
+    if CONVERSATION_PARTNER != None:
+        engage_in_conversation()
+        return
+
     direction = None
 
     if KEYBOARD[key.UP]:
-        GAME_BOARD.draw_msg("You pressed up")
         direction = "up"
     elif KEYBOARD[key.LEFT]:
-        GAME_BOARD.draw_msg("You pressed left")
         direction = "left"
     elif KEYBOARD[key.RIGHT]:
-        GAME_BOARD.draw_msg("You pressed right")
         direction = "right"
     elif KEYBOARD[key.DOWN]:
-        GAME_BOARD.draw_msg("You pressed down")
         direction = "down"
        
     if direction:
