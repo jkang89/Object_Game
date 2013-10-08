@@ -23,6 +23,14 @@ class Trees(GameElement):
     IMAGE = "ShortTree"
     SOLID = True
 
+class Walls(GameElement):
+    IMAGE = "Wall"
+    SOLID = True
+
+class Chests(GameElement):
+    IMAGE = "Chest"
+    SOLID = True
+
 class Character(GameElement):
     IMAGE = "Cat"
     def __init__(self):
@@ -67,7 +75,6 @@ def initialize():
     rock_positions = [
         (0,3),
         (1,11),
-        (1,2),
         (2,0),
         (3,9),
         (3,7),
@@ -117,6 +124,65 @@ def initialize():
         GAME_BOARD.register(tree)
         GAME_BOARD.set_el(pos[0], pos[1], tree)
         trees.append(tree)
+
+    wall_positions = [
+        (2,1),
+        (5,2),
+        (7,1),
+        (7,10),
+        (7,11),
+        (8,3),
+        (9,1),
+        (9,4),
+        (9,10),
+        (9,11),
+        (10,2),
+        (10,3),
+        (10,4),
+        (11,0),
+        (11,3),
+        (11,6),
+        (11,8),
+        (12,1)
+        ]
+
+    walls = [] 
+
+    for pos in wall_positions:
+        wall = Walls()
+        GAME_BOARD.register(wall)
+        GAME_BOARD.set_el(pos[0], pos[1], wall)
+        walls.append(wall)
+
+    chest_positions = [
+        (2,4),
+        (3,8),
+        (3,11),
+        (4,3),
+        (4,7),
+        (5,0),
+        (5,8),
+        (5,11),
+        (7,7),
+        (7,9),
+        (8,4),
+        (8,6),
+        (9,7),
+        (11,1),
+        (11,10),
+        (11,11),
+        (14,1),
+        (14,6),
+        (15,0)
+        ]
+
+    chests = []
+
+    for pos in chest_positions:
+        chest = Chests()
+        GAME_BOARD.register(chest)
+        GAME_BOARD.set_el(pos[0], pos[1], chest)
+        chests.append(chest)
 
     global PLAYER
     PLAYER = Character()
