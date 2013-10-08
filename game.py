@@ -3,6 +3,7 @@ import pyglet
 from pyglet.window import key
 from core import GameElement
 import sys
+import random
 
 #### DO NOT TOUCH ####
 GAME_BOARD = None
@@ -130,6 +131,10 @@ class Gem(GameElement):
 class BlueGem(Gem):
     IMAGE = "BlueGem"
 
+class OrangeGem(Gem):
+    IMAGE = "OrangeGem"
+
+
 class DoorClosed(GameElement):
     IMAGE = "DoorClosed"
     SOLID = True
@@ -142,26 +147,26 @@ class DoorClosed(GameElement):
 def initialize():
     """Put game initialization code here"""
 
-    blue_gem_positions = [
-        (3,0),
-        (6,0),
-        (1,2),
-        (5,2),
-        (4,4),
-        (7,4),
-        (2,6),
-        (6,6),
-        (3,8),
-        (5,8)
-        ]
+    # blue_gem_positions = [
+    #     (3,0),
+    #     (6,0),
+    #     (1,2),
+    #     (5,2),
+    #     (4,4),
+    #     (7,4),
+    #     (2,6),
+    #     (6,6),
+    #     (3,8),
+    #     (5,8)
+    #     ]
 
-    blue_gems = []
+    # blue_gems = []
 
-    for pos in blue_gem_positions:
-        blue_gem = BlueGem()
-        GAME_BOARD.register(blue_gem)
-        GAME_BOARD.set_el(pos[0], pos[1], blue_gem)
-        blue_gems.append(blue_gem)
+    # for pos in blue_gem_positions:
+    #     blue_gem = BlueGem()
+    #     GAME_BOARD.register(blue_gem)
+    #     GAME_BOARD.set_el(pos[0], pos[1], blue_gem)
+    #     blue_gems.append(blue_gem)
 
     rock_positions = [
         (0,1),
@@ -267,6 +272,12 @@ def initialize():
     GAME_BOARD.register(doorclosed)
     GAME_BOARD.set_el(9,8, doorclosed)
 
+    def make_orange_gems():
+        orange_gem = OrangeGem()
+        GAME_BOARD.register(orange_gem)
+        GAME_BOARD.set_el(pos[0], pos[1], orange_gem)
+
+
     global PLAYER
     PLAYER = Character()
     GAME_BOARD.register(PLAYER)
@@ -302,6 +313,27 @@ def engage_in_conversation():
     if answer == p.answer:
         GAME_BOARD.del_el(p.x, p.y)
 
+def gem_handler():
+    print "Gem Handler was called."
+
+
+    possible_x = random.randint(0, 9)
+    possible_y = random.randint(0,8)
+
+    position = (possible_x, possible_y)
+
+    existing_el = GAME_BOARD.get_el(possible_x, possible_y)
+
+    if existing_el is None:
+        orange_gem = OrangeGem()
+        GAME_BOARD.register(orange_gem)
+        GAME_BOARD.set_el(position[0], position[1], orange_gem)
+    else:
+        pass
+
+    position = (possible_x, possible_y)
+
+    print "%d, %d" % (position[0], position[1])
 
 def keyboard_handler():  
     if CONVERSATION_PARTNER != None:
@@ -339,4 +371,6 @@ def keyboard_handler():
         if existing_el is None or not existing_el.SOLID:
             GAME_BOARD.del_el(PLAYER.x, PLAYER.y)
             GAME_BOARD.set_el(next_x, next_y, PLAYER)
+
+
 
