@@ -48,6 +48,22 @@ class Character(GameElement):
             return (self.x+1, self.y)
         return None
 
+class NPC(GameElement):
+    # if defeated != True: #Make defeated 
+    #     SOLID = True
+    # else:
+    #     SOLID = False
+    SOLID = True
+
+class Blue_NPC(NPC):
+    IMAGE = "Princess"
+
+class Green_NPC(NPC):
+    IMAGE = "Boy"
+
+class Orange_NPC(NPC):
+    IMAGE = "Horns"
+
 class Gem(GameElement):
     SOLID = False
 
@@ -71,9 +87,64 @@ class OrangeGem(Gem):
 
 def initialize():
     """Put game initialization code here"""
+
+    blue_gem_positions = [
+        (0,3),
+        (0,6),
+        (0,11),
+        (3,0),
+        (8,0),
+        (8,2),
+        (9,8),
+        (12,0),
+        (15,1),
+        (15,3)
+        ]
+
+    blue_gems = []
+
+    for pos in blue_gem_positions:
+        blue_gem = BlueGem()
+        GAME_BOARD.register(blue_gem)
+        GAME_BOARD.set_el(pos[0], pos[1], blue_gem)
+        blue_gems.append(blue_gem)
+
+
+    green_gem_positions = [
+        (4,8),
+        (6,2),
+        (8,11),
+        (9,3),
+        (13,1)
+        ]
+
+    green_gems = []
+
+    for pos in green_gem_positions:
+        green_gem = GreenGem()
+        GAME_BOARD.register(green_gem)
+        GAME_BOARD.set_el(pos[0], pos[1], green_gem)
+        green_gems.append(green_gem)
+
+
+    orange_gem_positions = [
+        (1,5),
+        (5,5),
+        (11,5),
+        (12,8)
+        ]
+
+    orange_gems = []
+
+    for pos in orange_gem_positions:
+        orange_gem = OrangeGem()
+        GAME_BOARD.register(orange_gem)
+        GAME_BOARD.set_el(pos[0], pos[1], orange_gem)
+        orange_gems.append(orange_gem)
     
     rock_positions = [
-        (0,3),
+        (0,4),
+        (1,3),
         (1,11),
         (2,0),
         (3,9),
@@ -101,7 +172,7 @@ def initialize():
 
     tree_positions = [
         (0,5),
-        (0,10),
+        (1,10),
         (1,6),
         (1,4),
         (4,0),
@@ -184,6 +255,53 @@ def initialize():
         GAME_BOARD.set_el(pos[0], pos[1], chest)
         chests.append(chest)
 
+    Blue_NPC_positions = [
+        (0,2),
+        (0,7),
+        (0,10),
+        (3,1)
+        ]
+
+    Blue_NPCs = []
+
+    for pos in Blue_NPC_positions:
+        blue_npc = Blue_NPC()
+        GAME_BOARD.register(blue_npc)
+        GAME_BOARD.set_el(pos[0], pos[1], blue_npc)
+        Blue_NPCs.append(blue_npc)
+
+    Green_NPC_positions = [
+        (4,9),
+        (6,1),
+        (8,10),
+        (9,2),
+        (13,2)
+        ]
+
+    Green_NPCs = []
+
+    for pos in Green_NPC_positions:
+        green_npc = Green_NPC()
+        GAME_BOARD.register(green_npc)
+        GAME_BOARD.set_el(pos[0], pos[1], green_npc)
+        Green_NPCs.append(green_npc)
+
+    Orange_NPC_positions = [
+        (2,5),
+        (5,4),
+        (10,5),
+        (12,5),
+        (12,7)
+        ]
+
+    Orange_NPCs = []
+
+    for pos in Orange_NPC_positions:
+        orange_npc = Orange_NPC()
+        GAME_BOARD.register(orange_npc)
+        GAME_BOARD.set_el(pos[0], pos[1], orange_npc)
+        Orange_NPCs.append(orange_npc)
+
     global PLAYER
     PLAYER = Character()
     GAME_BOARD.register(PLAYER)
@@ -191,19 +309,7 @@ def initialize():
     print PLAYER
 
     GAME_BOARD.draw_msg("This game is wicked awesome.")
-
-    blue_gem = BlueGem()
-    GAME_BOARD.register(blue_gem)
-    GAME_BOARD.set_el(3, 1, blue_gem)
-
-    green_gem = GreenGem()
-    GAME_BOARD.register(green_gem)
-    GAME_BOARD.set_el(0, 4, green_gem)
-
-    orange_gem = OrangeGem()
-    GAME_BOARD.register(orange_gem)
-    GAME_BOARD.set_el(2, 4, orange_gem)
-
+    
 def keyboard_handler():  
     direction = None
 
