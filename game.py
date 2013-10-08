@@ -67,6 +67,7 @@ class Princess_NPC(NPC):
     IMAGE = "Princess"
     LINES = ["Hello, welcome to our barren land. (Press SPACE to advance conversation.)",
              "Please answer this simple question to pass.",
+             "Don't just button-mash. If you don't select the right answer, you'll have to start the conversation over.",
              "If you were running a race, and you pass the person in 2nd place, what place would you be in?",
              "a) First place    b) Second place     c) Third place      d) The best place"
              ]
@@ -86,7 +87,7 @@ class Girl_NPC(NPC):
     LINES = ["I expected someone... smarter, but I suppose you'll have to do.",
             "All right then, answer me this.",
             "What is the definition of the term, anathema?",
-            "Please choose wisely, and don't waste my time."
+            "Please choose wisely, and don't waste my time.",
             "Is the answer: a) a cursed, detested person     b) a medical procedure    c) an expression of ill will     d) readiness to believe"
             ]
     answer = "a"
@@ -94,10 +95,10 @@ class Girl_NPC(NPC):
 class Christian_NPC(NPC):
     IMAGE = "Christian"
     LINES = ["Hey, brotimes.",
-             "What are the haps?",
+             "You made it this far. That's cool. (I guess.)",
              "Sooooooo, you get to guess my middle name today.",
-             "If you don't get it, you fail at life."
-             "[Sweeps back hair.]",
+             "If you don't get it, you fail at life.",
+             "*Sweeps back hair.*",
              "What is my middle name?",
              "(Don't fuck this up.)",
              "Is it: a) Gross Garbage   b) Dr. Fishopolis   c) Zeppelin   d) None of the above"
@@ -110,8 +111,14 @@ class Horns_NPC(NPC):
     LINES = ["Greetings, plebian.",
              "Congratulations making it thus far, but I'm afraid this is the end of your journey.",
              "*Diabolical laughter*",
-             "Riddle me this: "
+             "Riddle me this: A farmer is trying to cross a river with a bag of corn, a hen, and a fox.  Did you write this down?",
+             "The farmer's boat is only big enough to take himself and one other item per trip.",
+             "The hen cannot be left alone with the corn or she will eat it.",
+             "Likewise, the fox cannot be left alone with the hen, or the hen will be eaten.",
+             "How many times does the farmer go from one back to the other?",
+             "a) 3 moves      b) 5 moves       c) 7 moves      d) 10 moves"
             ]
+    answer = "c"
 
 class Gem(GameElement):
     SOLID = False
