@@ -3,7 +3,6 @@ import pyglet
 from pyglet.window import key
 from core import GameElement
 import sys
-import random
 
 #### DO NOT TOUCH ####
 GAME_BOARD = None
@@ -41,7 +40,7 @@ class Character(GameElement):
     IMAGE = "Cat"
     def __init__(self):
         GameElement.__init__(self)
-        self.inventory = {"Gems": 0}
+        self.inventory = []
 
     def next_pos(self, direction):
         if direction == "up":
@@ -113,7 +112,6 @@ class Horns_NPC(NPC):
              "*Diabolical laughter*",
              "Riddle me this: "
             ]
-
 
 class Gem(GameElement):
     SOLID = False
